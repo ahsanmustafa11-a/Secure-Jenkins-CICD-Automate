@@ -1,4 +1,4 @@
-# 📚 Library Management System (LMS)
+# 📚 CI/CD Automation(Jenkins) to Python Flask App LMS Application
 
 A production-style **Library Management System** built using a multi-container Docker architecture. The project demonstrates how to containerize a full-stack web application by integrating a responsive frontend, a Flask REST API backend, a MySQL database, and an Nginx reverse proxy using Docker Compose.
 
