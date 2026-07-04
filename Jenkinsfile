@@ -14,6 +14,22 @@ pipeline {
             }
         }
 
+        stage('GitLeaks') {
+            steps {
+                script {
+                    gitleaks()
+                }
+            }
+        }
+
+        stage('Semgrep') {
+            steps {
+                script {
+                    semgrep()
+                }
+            }
+        }
+
         stage('SonarQube') {
             steps {
                 script {
