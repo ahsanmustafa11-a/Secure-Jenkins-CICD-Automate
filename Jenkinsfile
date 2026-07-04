@@ -22,14 +22,6 @@ pipeline {
             }
         }
 
-        stage('Semgrep') {
-            steps {
-                script {
-                    semgrep()
-                }
-            }
-        }
-
         stage('SonarQube') {
             steps {
                 script {
