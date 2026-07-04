@@ -1,68 +1,86 @@
+@Library('shared') _
+
 pipeline {
 
     agent { label 'dev-agent-key' }
 
     stages {
 
-        stage('Checkout') {
+        stage('Clone') {
             steps {
-                checkout scm
-            }
-        }
-
-        stage('Build Images') {
-            steps {
-                sh '''
-                    docker compose build
-                '''
-            }
-        }
-
-        stage('Docker Hub Login') {
-            steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'dockerpush',
-                    usernameVariable: 'DOCKER_USER',
-                    passwordVariable: 'DOCKER_PASS'
-                )]) {
-                    sh '''
-                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                    '''
+                script {
+                    clone("https://github.com/ahsanmustafa11-a/Secure-Jenkins-CICD-Automate.git", "main")
                 }
             }
         }
 
-        stage('Push Images') {
+        stage('GitLeaks') {
             steps {
-                sh '''
-                    docker compose push
-                '''
+                script {
+                    gitleaks()
+                }
             }
         }
 
-        stage('Deploy Containers') {
+        stage('Semgrep') {
             steps {
-                sh '''
-                    docker compose down || true
-                    docker compose up -d
-                '''
+                script {
+                    semgrep()
+                }
             }
         }
 
-        stage('Verify Deployment') {
+        stage('SonarQube') {
             steps {
-                sh '''
-                    echo "========== Running Containers =========="
-                    docker ps
+                script {
+                    sonarcube()
+                }
+            }
+        }
 
-                    echo ""
-                    echo "========== Docker Images =========="
-                    docker images
+        stage('OWASP Dependency Check') {
+            steps {
+                script {
+                    owasp()
+                }
+            }
+        }
 
-                    echo ""
-                    echo "========== Compose Status =========="
-                    docker compose ps
-                '''
+        stage('Docker Build') {
+            steps {
+                sh 'docker compose build'
+            }
+        }
+
+        stage('Trivy') {
+            steps {
+                script {
+                    trivy()
+                }
+            }
+        }
+
+        stage('Docker Registry') {
+            steps {
+                script {
+                    dockerRegistry()
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    dockerDeploy()
+                }
+            }
+        }
+
+        stage('OWASP ZAP') {
+            steps {
+                script {
+                    owaspZap(APP_URL)
+                }
             }
         }
 
@@ -70,17 +88,19 @@ pipeline {
 
     post {
 
-        success {
-            echo 'Application deployed successfully.'
-        }
-
-        failure {
-            echo 'Pipeline failed.'
-        }
-
         always {
-            sh 'docker logout || true'
+
+            script {
+
+                notify(
+                    "ahsan820820@gmail.com",
+                    currentBuild.currentResult
+                )
+
+            }
+
         }
 
     }
+
 }
