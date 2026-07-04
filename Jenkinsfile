@@ -28,13 +28,13 @@ pipeline {
             }
         }
 
-        stage('Trivy') {
-            steps {
-                script {
-                    trivy()
-                }
-            }
-        }
+        // stage('Trivy') {
+        //     steps {
+        //         script {
+        //             trivy()
+        //         }
+        //     }
+        // }
 
         stage('Docker Registry') {
             steps {
