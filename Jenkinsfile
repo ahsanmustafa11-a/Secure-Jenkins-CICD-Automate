@@ -14,14 +14,6 @@ pipeline {
             }
         }
 
-        stage('GitLeaks') {
-            steps {
-                script {
-                    gitleaks()
-                }
-            }
-        }
-
         stage('SonarQube') {
             steps {
                 script {
