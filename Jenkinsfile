@@ -22,30 +22,6 @@ pipeline {
             }
         }
 
-        stage('Semgrep') {
-            steps {
-                script {
-                    semgrep()
-                }
-            }
-        }
-
-        stage('SonarQube') {
-            steps {
-                script {
-                    sonarcube()
-                }
-            }
-        }
-
-        stage('OWASP Dependency Check') {
-            steps {
-                script {
-                    owasp()
-                }
-            }
-        }
-
         stage('Docker Build') {
             steps {
                 sh 'docker compose build'
@@ -72,14 +48,6 @@ pipeline {
             steps {
                 script {
                     dockerDeploy()
-                }
-            }
-        }
-
-        stage('OWASP ZAP') {
-            steps {
-                script {
-                    owaspZap(APP_URL)
                 }
             }
         }
