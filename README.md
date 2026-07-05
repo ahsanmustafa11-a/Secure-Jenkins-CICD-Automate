@@ -1,378 +1,363 @@
-# 📚 CI/CD Automation(Jenkins) to Python Flask App LMS Application
+# 🚀 Secure Jenkins CI/CD Automation using Shared Library
 
-A production-style **Library Management System** built using a multi-container Docker architecture. The project demonstrates how to containerize a full-stack web application by integrating a responsive frontend, a Flask REST API backend, a MySQL database, and an Nginx reverse proxy using Docker Compose.
+A production-style Jenkins CI/CD pipeline that automates application delivery using **Jenkins Shared Libraries**, **Docker Compose**, **DevSecOps security scanning**, **email notifications**, and **Jenkins Agents**.
 
-This project is designed to provide hands-on experience with Docker containerization, multi-container communication, reverse proxy configuration, and full-stack application deployment. It serves as a practical learning resource for Docker, Linux, DevOps, and backend development concepts.
-
----
-
-# 📑 Table of Contents
-
-* Project Overview
-* System Architecture
-* Project Structure
-* Technologies Used
-* Features
-* Prerequisites
-* Getting Started
-* Running with Docker Compose
-* Running Manually (Amazon Linux 2023)
-* Verification Commands
-* API Endpoints
-* Docker Architecture
-* Troubleshooting
-* Future Improvements
-* Author
+This project demonstrates how to build a reusable and secure CI/CD pipeline by separating pipeline logic into a Jenkins Shared Library while integrating multiple security tools for code, dependency, container, and runtime scanning.
 
 ---
 
-# 🚀 Project Overview
+# 📌 Features
 
-The Library Management System consists of four independent Docker containers that work together to provide a complete web application.
-
-* **Frontend:** Responsive user interface built with HTML, CSS, and JavaScript.
-* **Backend:** Flask REST API responsible for business logic and database operations.
-* **Database:** MySQL database for storing books and library records.
-* **Reverse Proxy:** Nginx routes client requests to the appropriate service.
-
-Each service runs inside its own container and communicates through a dedicated Docker bridge network, demonstrating a production-style deployment architecture.
+- Jenkins Declarative Pipeline
+- Jenkins Shared Library
+- Jenkins Controller & Agent Architecture
+- Docker Compose Build & Deployment
+- Docker Hub Integration
+- Automated Email Notifications
+- SonarQube Code Quality Analysis
+- GitLeaks Secret Detection
+- Semgrep SAST Scanning
+- OWASP Dependency Check
+- Trivy Filesystem Scan
+- OWASP ZAP DAST Scan
+- Scan Report Generation
+- Report Email Attachments
+- Fully Automated CI/CD Workflow
 
 ---
 
-# 🏗️ System Architecture
+# 🏗️ Architecture
 
-```text
-                   User Browser
-                        │
-                        ▼
-                Nginx Reverse Proxy
-                        │
-          ┌─────────────┴─────────────┐
-          │                           │
-          ▼                           ▼
-   Frontend Container          Backend Container
-      (Nginx)                     (Flask API)
-                                      │
-                                      ▼
-                             MySQL Database
+```
+Developer
+    │
+    ▼
+GitHub Repository
+    │
+    ▼
+Webhook / Build Trigger
+    │
+    ▼
+Jenkins Controller
+    │
+    ▼
+Jenkins Agent
+    │
+    ▼
+Shared Library
+    │
+    ▼
+Git Clone
+    │
+    ▼
+GitLeaks
+    │
+    ▼
+Semgrep
+    │
+    ▼
+SonarQube
+    │
+    ▼
+OWASP Dependency Check
+    │
+    ▼
+Docker Compose Build
+    │
+    ▼
+Trivy Scan
+    │
+    ▼
+Docker Hub Push
+    │
+    ▼
+Docker Deployment
+    │
+    ▼
+OWASP ZAP
+    │
+    ▼
+Email Notification
 ```
 
 ---
 
-# 📁 Project Structure
+# 📂 Repository Structure
 
-```text
-library-management-system/
+```
+Secure-Jenkins-CICD-Automate
 │
-├── .env
+├── backend
+├── frontend
+├── database
 ├── docker-compose.yml
+├── Jenkinsfile
 ├── README.md
-│
-├── frontend/
-│   ├── Dockerfile
-│   ├── README.md
-│   ├── nginx.conf
-│   ├── index.html
-│   ├── css/
-│   │   └── style.css
-│   ├── js/
-│   │   └── app.js
-│   └── images/
-│
-├── backend/
-│   ├── Dockerfile
-│   ├── README.md
-│   ├── app.py
-│   └── requirements.txt
-│
-├── database/
-│   └── init.sql
-│
-└── nginx/
-    ├── Dockerfile
-    └── default.conf
+└── ...
 ```
+
+---
+
+# 🔐 Jenkins Shared Library
+
+Pipeline logic is separated into a reusable Jenkins Shared Library.
+
+```
+jenkins-shared-library
+│
+├── vars
+│   ├── clone.groovy
+│   ├── dockerDeploy.groovy
+│   ├── dockerRegistry.groovy
+│   ├── gitleaks.groovy
+│   ├── notify.groovy
+│   ├── owasp.groovy
+│   ├── owaspZap.groovy
+│   ├── semgrep.groovy
+│   ├── sonarcube.groovy
+│   └── trivy.groovy
+│
+└── README.md
+```
+
+Using a Shared Library keeps Jenkinsfiles clean and promotes reusable pipeline code across multiple projects.
+
+---
+
+# 📦 Pipeline Workflow
+
+The pipeline performs the following tasks automatically:
+
+1. Clone Repository
+2. GitLeaks Secret Scan
+3. Semgrep Static Analysis
+4. SonarQube Code Analysis
+5. OWASP Dependency Check
+6. Docker Compose Build
+7. Trivy Filesystem Scan
+8. Docker Hub Login
+9. Docker Image Push
+10. Docker Logout
+11. Deploy Containers
+12. OWASP ZAP Dynamic Scan
+13. Email Notification with Reports
+
+---
+
+# 🔒 Why Security Tools?
+
+This project integrates multiple security layers throughout the CI/CD pipeline.
+
+| Tool | Purpose |
+|------|---------|
+| GitLeaks | Detects hardcoded secrets, API keys, and passwords |
+| Semgrep | Static Application Security Testing (SAST) |
+| SonarQube | Code quality, bugs, vulnerabilities, and code smells |
+| OWASP Dependency Check | Detects vulnerable third-party libraries |
+| Trivy | Container and filesystem vulnerability scanning |
+| OWASP ZAP | Dynamic Application Security Testing (DAST) |
+
+This layered approach helps identify security issues before software reaches production.
+
+---
+
+# 📧 Email Notification
+
+The pipeline sends automated email notifications after every build.
+
+Notifications include:
+
+- Build Status
+- Build Number
+- Job Name
+- Build URL
+- Attached Security Reports
+
+Example attachments:
+
+- Trivy Report
+- GitLeaks Report
+- Semgrep Report
+- Dependency Check Report
+- ZAP Report
+
+---
+
+# 📨 Gmail SMTP Configuration
+
+To enable Jenkins email notifications:
+
+### 1. Enable Two-Factor Authentication
+
+Enable 2-Step Verification on your Gmail account.
+
+### 2. Generate an App Password
+
+Google Account
+
+```
+Security  ⟶  App Passwords  ⟶  Mail  ⟶  Generate
+```
+
+Use the generated App Password instead of your Gmail password.
+
+---
+
+### Jenkins Configuration
+
+```
+Manage Jenkins   ⟶   Configure System
+```
+
+Configure:
+
+```
+SMTP Server ⟶ smtp.gmail.com  ⟶  Port  ⟶ 587  ⟶ Authentication  ⟶  Enabled  ⟶  TLS  ⟶  Enabled  ⟶  SSL  ⟶  Disabled
+```
+
+Add your Gmail credentials using the generated App Password.
+
+---
+
+# 🤖 Jenkins Agent Configuration
+
+The pipeline executes on a Jenkins Agent instead of the Controller.
+
+Using agents provides several benefits:
+
+- Prevents heavy builds from consuming Controller resources
+- Isolates Docker workloads
+- Improves Jenkins stability
+- Supports distributed builds
+- Enables parallel execution
+
+Example:
+
+```
+Controller  ⟶  SSH Agent  ⟶  Docker Build  ⟶  Deployment
+```
+
+Pipeline Example:
+
+```groovy
+agent {
+    label 'dev-agent-key'
+}
+```
+
+---
+
+# 📚 Configure Jenkins Shared Library
+
+Go to:
+
+```
+Manage Jenkins  ⟶  System  ⟶  Global Trusted Pipeline Libraries
+```
+
+Configure:
+
+| Setting | Value |
+|----------|-------|
+| Name | shared |
+| Default Version | main |
+| Retrieval | Modern SCM |
+| Repository | Your Shared Library Git Repository |
+
+---
+
+# 📜 Using the Shared Library
+
+Import the library:
+
+```groovy
+@Library('shared') _
+```
+
+Example:
+
+```groovy
+stage('GitLeaks') {
+    steps {
+        script {
+            gitleaks()
+        }
+    }
+}
+```
+
+The Jenkinsfile only orchestrates stages, while the implementation resides in the Shared Library.
+
+---
+
+# 📊 Generated Reports
+
+The pipeline generates reports including:
+
+```
+reports/
+
+├── gitleaks-report.json
+├── semgrep-report.json
+├── trivy-report.json
+├── dependency-check-report.html
+├── dependency-check-report.json
+└── zap-report.json
+```
+
+These reports can be archived and sent as email attachments.
 
 ---
 
 # 🛠️ Technologies Used
 
-| Technology     | Purpose                           |
-| -------------- | --------------------------------- |
-| Docker         | Containerization                  |
-| Docker Compose | Multi-container orchestration     |
-| Python         | Backend programming language      |
-| Flask          | REST API framework                |
-| Gunicorn       | Production WSGI server            |
-| MySQL          | Relational database               |
-| HTML5          | Frontend structure                |
-| CSS3           | User interface styling            |
-| JavaScript     | Client-side functionality         |
-| Nginx          | Static web server & reverse proxy |
-| Git            | Version control                   |
-| GitHub         | Source code hosting               |
-
----
-
-# ✨ Features
-
-* Multi-container Docker architecture
-* Responsive dashboard interface
-* Book management (Create, Read, Update, Delete)
-* Real-time search functionality
-* RESTful API integration
-* MySQL database initialization with sample data
-* Nginx reverse proxy configuration
-* Docker networking between containers
-* Persistent database storage using Docker volumes
-* Health check support
-* Production-ready Dockerfiles
-
----
-
-# 📋 Prerequisites
-
-Ensure the following software is installed before running the project:
-
-* Docker Engine
-* Docker Compose (or `docker-compose`)
-* Git
-
-Verify the installation:
-
-```bash
-docker --version
-docker-compose --version
-git --version
-```
-
----
-
-# 🚀 Getting Started
-
-Clone the repository:
-
-```bash
-git clone https://github.com/<your-username>/library-management-system.git
-```
-
-Navigate to the project directory:
-
-```bash
-cd library-management-system
-```
-
----
-
-# 🐳 Running with Docker Compose
-
-Build all images:
-
-```bash
-docker compose build --no-cache
-```
-
-If your system uses the standalone Compose binary:
-
-```bash
-docker-compose build --no-cache
-```
-
-Start all containers:
-
-```bash
-docker compose up -d
-```
-
-or
-
-```bash
-docker-compose up -d
-```
-
-Stop all containers:
-
-```bash
-docker compose down
-```
-
----
-
-# ☁️ Running Manually (Amazon Linux 2023)
-
-Some Amazon Linux 2023 systems may encounter Docker Compose Buildx compatibility issues.
-
-If `docker compose build` or `docker-compose build` fails, build the images manually.
-
-Build Backend
-
-```bash
-docker build -t library-management-system-backend ./backend
-```
-
-Build Frontend
-
-```bash
-docker build -t library-management-system-frontend ./frontend
-```
-
-Build Reverse Proxy
-
-```bash
-docker build -t library-management-system-nginx ./nginx
-```
-
-Start the containers manually using Docker or use the existing Compose file after building the images successfully.
-
----
-
-# ✅ Verification Commands
-
-Verify Docker images:
-
-```bash
-docker images
-```
-
-Verify running containers:
-
-```bash
-docker ps
-```
-
-Verify Docker network:
-
-```bash
-docker network ls
-```
-
-Inspect the application network:
-
-```bash
-docker network inspect lms-network
-```
-
-Verify Docker volumes:
-
-```bash
-docker volume ls
-```
-
-Check container logs:
-
-```bash
-docker logs <container_name>
-```
-
-Verify backend API:
-
-```bash
-curl http://localhost:5000/books
-```
-
-Verify application:
-
-```text
-http://localhost
-```
-
----
-
-# 🔌 API Endpoints
-
-| Method | Endpoint      | Description                   |
-| ------ | ------------- | ----------------------------- |
-| GET    | `/books`      | Retrieve all books            |
-| POST   | `/books`      | Add a new book                |
-| PUT    | `/books/{id}` | Update an existing book       |
-| DELETE | `/books/{id}` | Delete a book                 |
-| GET    | `/stats`      | Retrieve dashboard statistics |
-| GET    | `/health`     | Application health check      |
-
----
-
-# 🐳 Docker Architecture
-
-The application is divided into four independent services.
-
-| Service       | Description                                      |
-| ------------- | ------------------------------------------------ |
-| Frontend      | Serves the user interface using Nginx            |
-| Backend       | Flask REST API handling business logic           |
-| MySQL         | Stores application data                          |
-| Reverse Proxy | Routes incoming requests to frontend and backend |
-
-Communication between services is handled through a Docker bridge network, while MySQL data is stored in a persistent Docker volume.
-
----
-
-# ⚠️ Troubleshooting
-
-### Docker Compose not found
-
-Use:
-
-```bash
-docker-compose
-```
-
-instead of
-
-```bash
-docker compose
-```
-
-if the Compose plugin is unavailable.
-
----
-
-### Buildx version error
-
-If you encounter a Buildx compatibility issue on Amazon Linux 2023, build the Docker images manually before starting the application.
-
----
-
-### Port already in use
-
-Identify the process using the port:
-
-```bash
-ss -tulpn
-```
-
-Stop the conflicting service or update the port mapping.
-
----
-
-### Database connection issue
-
-Check the MySQL container status:
-
-```bash
-docker ps
-```
-
-Review the MySQL logs:
-
-```bash
-docker logs lms-mysql
-```
+- Jenkins
+- Jenkins Shared Library
+- Docker
+- Docker Compose
+- GitHub
+- SonarQube
+- Trivy
+- Semgrep
+- GitLeaks
+- OWASP Dependency Check
+- OWASP ZAP
+- Gmail SMTP
+- Linux
+- SSH
+- Groovy
+- Declarative Pipeline
 
 ---
 
 # 🚀 Future Improvements
 
-* User Authentication
-* JWT Authorization
-* Role-Based Access Control (RBAC)
-* Student Management Module
-* Book Issue & Return Workflow
-* Book Cover Image Upload
-* Pagination & Filtering
-* Docker Secrets
-* CI/CD with GitHub Actions
-* Monitoring with Prometheus & Grafana
-* Kubernetes Deployment
+- Kubernetes Deployment
+- Helm Charts
+- ArgoCD GitOps
+- AWS ECR Integration
+- Amazon ECS Deployment
+- Amazon EKS Deployment
+- Slack Notifications
+- Microsoft Teams Notifications
+- HashiCorp Vault Integration
+- Terraform Infrastructure Provisioning
+
+---
+
+# 📖 Learning Objectives
+
+This project demonstrates:
+
+- Jenkins Administration
+- Shared Library Development
+- Secure CI/CD Design
+- DevSecOps Integration
+- Docker Automation
+- Pipeline Reusability
+- Distributed Jenkins Architecture
+- Automated Security Scanning
+- Enterprise CI/CD Best Practices
 
 ---
 
@@ -380,8 +365,6 @@ docker logs lms-mysql
 
 **Ahsan Mustafa**
 
-**Project:** Library Management System (LMS)
+DevOps | Cloud | Linux | AWS | Docker | Jenkins | DevSecOps
 
-**Architecture:** Docker • Flask • MySQL • Nginx
-
-This project was developed for learning Docker containerization, multi-container application deployment, and full-stack web application architecture.
+---
