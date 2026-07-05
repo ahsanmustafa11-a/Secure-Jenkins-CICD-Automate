@@ -61,7 +61,7 @@ pipeline {
             script {
 
                 notify(
-                    "ahsan820820@gmail.com",
+                    "test@example.com",
                     currentBuild.currentResult
                 )
 
